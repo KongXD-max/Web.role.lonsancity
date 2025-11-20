@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>สมัครสมาชิก - ScriptAcademy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+      *{font-family: 'Kanit', sans-serif;}
+      .register-image-container img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      /* สไตล์สำหรับข้อความแจ้งเตือน (ซ่อนไว้ก่อน) */
+      .validation-feedback {
+        color: red;
+        font-size: 0.85em;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body style="background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+      <div class="row bg-white rounded-5 shadow" style="width: 80%; max-width: 900px;"> 
+        <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center p-3 register-image-container">
+          <img src="images/code_background.jpg" alt="Coding Background" class="img-fluid rounded-4"> 
+        </div>
+
+        <div class="col-md-6 p-5">
+          <div class=" text-center"><i class="fa-solid fa-user-plus fa-5x text-info"></i></div>
+          <div class="text-center fs-2 fw-bold">สมัครสมาชิก</div>
+          
+          <form id="registerForm">
+            <div class="input-group mt-4">
+              <div class="input-group-text bg-info"><i class="fa-solid fa-user"></i></div>
+              <input class="form-control bg-light" type="text" id="username" placeholder="ชื่อผู้ใช้" required>
+            </div>
+            <div id="usernameFeedback" class="validation-feedback"></div>
+
+            <div class="input-group mt-2">
+              <div class="input-group-text bg-info"><i class="fa-solid fa-envelope"></i></div>
+              <input class="form-control bg-light" type="email" id="email" placeholder="อีเมล" required>
+            </div>
+            <div id="emailFeedback" class="validation-feedback"></div>
+
+            <div class="input-group mt-2">
+              <div class="input-group-text bg-info"><i class="fa-solid fa-lock"></i></div>
+              <input class="form-control bg-light" type="password" id="password" placeholder="รหัสผ่าน" required>
+            </div>
+            <div id="passwordFeedback" class="validation-feedback"></div>
+
+            <div class="input-group mt-2">
+              <div class="input-group-text bg-info"><i class="fa-solid fa-lock-open"></i></div>
+              <input class="form-control bg-light" type="password" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+            </div>
+            <div id="confirmPasswordFeedback" class="validation-feedback"></div>
+
+            <button type="submit" class="btn btn-info text-white w-100 mt-4">สมัครสมาชิก</button>
+          </form>
+          
+          <div class="text-center mt-3">
+              มีบัญชีอยู่แล้ว? <a href="login.html" class="text-info text-decoration-none fw-bold">ลงชื่อเข้าใช้ที่นี่</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    
+    <script>
+      // 1. รับค่า Element ต่างๆ 
+      const form = document.getElementById('registerForm');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const usernameFeedback = document.getElementById('usernameFeedback');
+      const passwordFeedback = document.getElementById('passwordFeedback');
+      const confirmPasswordFeedback = document.getElementById('confirmPasswordFeedback');
+
+      // 2. กำหนดเงื่อนไขการตรวจสอบ
+      const MIN_USERNAME_LENGTH = 5;
+      const MIN_PASSWORD_LENGTH = 8;
+      const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/; // ต้องมี A-Z, a-z, และตัวเลขอย่างน้อย 1 ตัว
+
+      // 3. ฟังก์ชันตรวจสอบทั้งหมดเมื่อกดปุ่ม
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // ป้องกันการส่ง Form แบบปกติ (เพื่อรันโค้ด JavaScript ก่อน)
+        
+        let isValid = true;
+        
+        // ตรวจสอบ Username
+        if (usernameInput.value.length < MIN_USERNAME_LENGTH) {
+          usernameFeedback.textContent = `* ชื่อผู้ใช้ต้องมีความยาวอย่างน้อย ${MIN_USERNAME_LENGTH} ตัวอักษร`;
+          isValid = false;
+        } else {
+          usernameFeedback.textContent = '';
+        }
+
+        // ตรวจสอบ Password
+        if (passwordInput.value.length < MIN_PASSWORD_LENGTH) {
+          passwordFeedback.textContent = `* รหัสผ่านต้องมีความยาวอย่างน้อย ${MIN_PASSWORD_LENGTH} ตัวอักษร`;
+          isValid = false;
+        } else if (!PASSWORD_REGEX.test(passwordInput.value)) {
+          passwordFeedback.textContent = '* รหัสผ่านต้องมีตัวอักษรใหญ่ (A-Z), ตัวอักษรเล็ก (a-z) และตัวเลข (0-9) อย่างน้อยอย่างละ 1 ตัว';
+          isValid = false;
+        } else {
+          passwordFeedback.textContent = '';
+        }
+
+        // ตรวจสอบยืนยันรหัสผ่าน
+        if (passwordInput.value !== confirmPasswordInput.value) {
+          confirmPasswordFeedback.textContent = '* รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+          isValid = false;
+        } else {
+          confirmPasswordFeedback.textContent = '';
+        }
+
+        // 4. ถ้าทุกอย่างถูกต้อง (จำลองการสมัครสำเร็จ)
+        if (isValid) {
+          alert('✔️ สมัครสมาชิกสำเร็จ! ข้อมูลของคุณได้รับการบันทึกแล้ว (ในทางทฤษฎี)');
+          // ในระบบจริง จะส่งข้อมูลไปยัง Server ด้วย form.submit() หรือ fetch()
+          // ตัวอย่างนี้ เราจะเปลี่ยนหน้าไปหน้า Login
+          window.location.href = 'login.html'; 
+        }
+      });
+    </script>
+  </body>
+</html>
